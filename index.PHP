@@ -72,6 +72,11 @@ if (isset($_GET['halaman'])) {
         }
     } else if ($_GET['halaman'] == "hapus") {
         //perdiapan hapus data
+        $hapus = mysqli_query($koneksi, "DELETE FROM mahasiswa WHERE id_mhs = '$_GET[id]' ");
+        echo "<script>
+                alert('Data Berhasil di Hapus!');
+                document.location='index.php';
+            </script>";
     }
 }
 
