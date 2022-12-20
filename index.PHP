@@ -1,3 +1,14 @@
+<?php
+
+$host = 'localhost';
+$user = 'root';
+$pass = '';
+$db = 'belajar';
+
+$koneksi = mysqli_connect($host, $user, $pass, $db) or die(mysqli_error($koneksi));
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -22,19 +33,19 @@
                 <form method="post" action="">
                     <div class="form-group">
                         <label for="tnim">Nim</label>
-                        <input type="text" name="tnim" id="tnim" class="form-control" placeholder="Inputkan Nim disini!">
+                        <input type="text" name="tnim" id="tnim" class="form-control" placeholder="Inputkan Nim disini!" required>
                     </div>
                     <div class="form-group">
                         <label for="tnama">Nama</label>
-                        <input type="text" name="tnama" id="tnama" class="form-control" placeholder="Inputkan Nama disini!">
+                        <input type="text" name="tnama" id="tnama" class="form-control" placeholder="Inputkan Nama disini!" required>
                     </div>
                     <div class="form-group">
                         <label for="talamat">Alamat</label>
-                        <textarea type="text" name="talamat" id="talamat" class="form-control" placeholder="Inputkan Alamat disini!"></textarea>
+                        <textarea type="text" name="talamat" id="talamat" class="form-control" placeholder="Inputkan Alamat disini!" required></textarea>
                     </div>
                     <div class="form-group">
                         <label for="tprodi">Program Studi</label>
-                        <select name="tprodi" id="tprodi" class="form-control">
+                        <select name="tprodi" id="tprodi" class="form-control" required>
                             <option></option>
                             <option value="D3-Sistem Informasi">D3-Sistem Informasi</option>
                             <option value="D3-Teknik Informatika">D3-Teknik Informatika</option>
@@ -57,7 +68,7 @@
         <!-- Awal Card Header -->
 
         <!-- Awal Card Tabel -->
-        <div class="card mt-4">
+        <div class="card mt-4 mb-5">
             <div class="card-header bg-success text-white">
                 Data Mahasiswa
             </div>
@@ -65,17 +76,26 @@
                 <table class="table table-bordered table-striped">
                     <tr>
                         <th>No</th>
+                        <th>Nim</th>
                         <th>Nama</th>
                         <th>Alamat</th>
                         <th>Program Studi</th>
                         <th>Aksi</th>
                     </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Abdulloh Alfarizki</td>
-                        <td>Jl. Manjang, Kota Bandung</td>
-                        <td>S1-Teknik Informatika</td>
-                    </tr>
+                    <?php
+                    $no = 1;
+                    $tampil = mysqli_query($koneksi, "SELECT * FROM mahasiswa ORDER BY id_mhs DESC");
+                    while ($data = mysqli_fetch_array($tampil)) :
+                    ?>
+                        <tr>
+                            <td><?= $no++; ?></td>
+                            <td><?= $data['nim']; ?></td>
+                            <td><?= $data['nama']; ?></td>
+                            <td><?= $data['alamat']; ?></td>
+                            <td><?= $data['prodi']; ?></td>
+                        </tr>
+                    <?php endwhile; //penutup perulangan while  
+                    ?>
                 </table>
             </div>
         </div>
