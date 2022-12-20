@@ -1,11 +1,36 @@
 <?php
-
+//koeksi ke database
 $host = 'localhost';
 $user = 'root';
 $pass = '';
 $db = 'belajar';
 
 $koneksi = mysqli_connect($host, $user, $pass, $db) or die(mysqli_error($koneksi));
+
+// tambah data ke database
+//jika tombol simpan diklik
+if (isset($_POST['bsimpan'])) {
+    $simpan = mysqli_query($koneksi, "INSERT INTO mahasiswa (nim, nama, alamat, prodi)
+                                     VALUES ('$_POST[tnim]',
+                                            '$_POST[tnama]',
+                                            '$_POST[talamat]',
+                                            '$_POST[tprodi]')
+                                     ");
+    //jika simpan sukses/data berhasil ditambahkan
+    if ($simpan) {
+        echo "<script>
+        alert('Data berhasil ditambahkan');
+        document.location='index.php';
+        </script>";
+    } else {
+        echo "<script>
+        alert('Data gagal ditambahkan!!');
+        document.location='index.php';
+        </script>";
+    }
+}
+
+
 
 ?>
 
