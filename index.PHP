@@ -10,26 +10,70 @@ $koneksi = mysqli_connect($host, $user, $pass, $db) or die(mysqli_error($koneksi
 // tambah data ke database
 //jika tombol simpan diklik
 if (isset($_POST['bsimpan'])) {
-    $simpan = mysqli_query($koneksi, "INSERT INTO mahasiswa (nim, nama, alamat, prodi)
+
+    //pengujian apakah data akan diedit atau di simpan baru
+    if ($_GET['halaman'] == "edit") {
+        //data akan di edit
+        $edit = mysqli_query($koneksi, "UPDATE mahasiswa SET 
+                                            nim = '$_POST[tnim]',
+                                            nama = '$_POST[tnama]',
+                                            alamat = '$_POST[talamat]',
+                                            prodi = '$_POST[tprodi]'
+                                        WHERE id_mhs = '$_GET[id]'
+                                        ");
+        //jika edit sukses/data berhasil ditambahkan
+        if ($edit) {
+            echo "<script>
+                    alert('Edit Data Sukses!');
+                    document.location='index.php';
+                </script>";
+        } else {
+            echo "<script>
+                    alert('Edit Data Gagal!!');
+                    document.location='index.php';
+                </script>";
+        }
+    } else {
+        //data akan disimpan baru
+        $simpan = mysqli_query($koneksi, "INSERT INTO mahasiswa (nim, nama, alamat, prodi)
                                      VALUES ('$_POST[tnim]',
                                             '$_POST[tnama]',
                                             '$_POST[talamat]',
                                             '$_POST[tprodi]')
                                      ");
-    //jika simpan sukses/data berhasil ditambahkan
-    if ($simpan) {
-        echo "<script>
-        alert('Data berhasil ditambahkan');
-        document.location='index.php';
-        </script>";
-    } else {
-        echo "<script>
-        alert('Data gagal ditambahkan!!');
-        document.location='index.php';
-        </script>";
+        //jika simpan sukses/data berhasil ditambahkan
+        if ($simpan) {
+            echo "<script>
+                    alert('Data berhasil ditambahkan');
+                    document.location='index.php';
+                  </script>";
+        } else {
+            echo "<script>
+                    alert('Data gagal ditambahkan!!');
+                    document.location='index.php';
+                </script>";
+        }
     }
 }
 
+//pengujian jika tombol edit/hapus diklik
+if (isset($_GET['halaman'])) {
+    //pengujian jika edit data
+    if ($_GET['halaman'] == "edit") {
+        //tampilkan data yang akan diedit
+        $tampil = mysqli_query($koneksi, "SELECT * FROM mahasiswa WHERE id_mhs = '$_GET[id]' ");
+        $data = mysqli_fetch_array($tampil);
+        if ($data) {
+            //jika data ditemukan, maka data ditampung dulu ke dalam variabel
+            $vnim = $data['nim'];
+            $vnama = $data['nama'];
+            $valamat = $data['alamat'];
+            $vprodi = $data['prodi'];
+        }
+    } else if ($_GET['halaman'] == "hapus") {
+        //perdiapan hapus data
+    }
+}
 
 
 ?>
@@ -58,20 +102,20 @@ if (isset($_POST['bsimpan'])) {
                 <form method="post" action="">
                     <div class="form-group">
                         <label for="tnim">Nim</label>
-                        <input type="text" name="tnim" id="tnim" class="form-control" placeholder="Inputkan Nim disini!" required>
+                        <input type="text" name="tnim" value="<?= @$vnim; ?>" id="tnim" class="form-control" placeholder="Inputkan Nim disini!" required>
                     </div>
                     <div class="form-group">
                         <label for="tnama">Nama</label>
-                        <input type="text" name="tnama" id="tnama" class="form-control" placeholder="Inputkan Nama disini!" required>
+                        <input type="text" name="tnama" value="<?= @$vnama; ?>" id="tnama" class="form-control" placeholder="Inputkan Nama disini!" required>
                     </div>
                     <div class="form-group">
                         <label for="talamat">Alamat</label>
-                        <textarea type="text" name="talamat" id="talamat" class="form-control" placeholder="Inputkan Alamat disini!" required></textarea>
+                        <textarea type="text" name="talamat" id="talamat" class="form-control" placeholder="Inputkan Alamat disini!" required><?= @$valamat; ?></textarea>
                     </div>
                     <div class="form-group">
                         <label for="tprodi">Program Studi</label>
                         <select name="tprodi" id="tprodi" class="form-control" required>
-                            <option></option>
+                            <option value="<?= @$vprodi; ?>"><?= @$vprodi; ?></option>
                             <option value="D3-Sistem Informasi">D3-Sistem Informasi</option>
                             <option value="D3-Teknik Informatika">D3-Teknik Informatika</option>
                             <option value="D3-Perbankan">D3-Perbankan</option>
@@ -119,8 +163,8 @@ if (isset($_POST['bsimpan'])) {
                             <td><?= $data['alamat']; ?></td>
                             <td><?= $data['prodi']; ?></td>
                             <td class="text-center">
-                                <a href="#" class="btn btn-warning btn-sm" name="bedit">Edit</a>
-                                <a href="#" class="btn btn-danger btn-sm" name="bhapus">Hapus</a>
+                                <a href="index.php?halaman=edit&id=<?= $data['id_mhs'] ?>" class="btn btn-warning btn-sm" name="bedit">Edit</a>
+                                <a href="index.php?halaman=hapus&id=<?= $data['id_mhs'] ?>" onclick="return confirm('Apakah yakin Anda akan menghapus data ini?')" class="btn btn-danger btn-sm" name="bhapus">Hapus</a>
                             </td>
                         </tr>
                     <?php endwhile; //penutup perulangan while  
@@ -134,6 +178,14 @@ if (isset($_POST['bsimpan'])) {
 
 
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
+
+
+    <footer class="text-center mb-3">
+        &copy; 2022 - <script>
+            document.write(new Date().getFullYear())
+        </script>
+        - Abdulloh
+    </footer>
 </body>
 
 </html>
