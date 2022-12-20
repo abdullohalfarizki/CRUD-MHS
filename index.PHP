@@ -93,6 +93,10 @@ $koneksi = mysqli_connect($host, $user, $pass, $db) or die(mysqli_error($koneksi
                             <td><?= $data['nama']; ?></td>
                             <td><?= $data['alamat']; ?></td>
                             <td><?= $data['prodi']; ?></td>
+                            <td class="text-center">
+                                <a href="#" class="btn btn-warning btn-sm" name="bedit">Edit</a>
+                                <a href="#" class="btn btn-danger btn-sm" name="bhapus">Hapus</a>
+                            </td>
                         </tr>
                     <?php endwhile; //penutup perulangan while  
                     ?>
