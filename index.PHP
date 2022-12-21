@@ -95,8 +95,8 @@ if (isset($_GET['halaman'])) {
 
 <body>
     <div class="container">
-        <h2 class="text-center mt-3">CRUD MHS PHP & MySQL + Bootstrap 4</h2>
-        <h3 class="text-center">DzulAbdul</h3>
+        <h3 class="text-center mt-3">CRUD MHS PHP & MySQL + Bootstrap 4</h3>
+        <h4 class="text-center">@DzulAbdul</h4>
 
         <!-- Awal Card Header -->
         <div class="card mt-4">
